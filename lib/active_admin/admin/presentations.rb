@@ -2,13 +2,14 @@ module Qwester
   ActiveAdmin.register Presentation do
 
     menu_label = 'Presentations'
-    menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
-    menu :parent => Qwester.active_admin_menu, :label => menu_label  
-    
+    # menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    menu_label = "#{menu_label}" unless Qwester.active_admin_menu
+    menu :parent => Qwester.active_admin_menu, :label => menu_label
+
     config.batch_actions = false
-    
+
     index do
-      column :name do |presentation| 
+      column :name do |presentation|
         link_to presentation.name, admin_qwester_presentation_path(presentation)
       end
       column :title
@@ -18,9 +19,10 @@ module Qwester
       column :questionnaires do |presentation|
         presentation.questionnaires.collect(&:title).join(', ')
       end
-      default_actions
+      # default_actions
+      actions
     end
-    
+
     show do
       h2 qwester_presentation.title
       div sanitize(qwester_presentation.description) if qwester_presentation.description.present?
@@ -41,7 +43,7 @@ module Qwester
       end
       para "Default: Will be inital presentation of quesitonnaires" if qwester_presentation.default?
     end
-    
+
     form do |f|
       f.inputs "Details" do
         f.input :name
@@ -67,20 +69,20 @@ module Qwester
         )
       end
     end unless Qwester.rails_three?
-    
+
     member_action :move_up do
       presentation = Presentation.find(params[:id])
       questionnaire = Questionnaire.find(params[:questionnaire_id])
       presentation.move_higher(questionnaire)
-      redirect_to admin_qwester_presentation_path(presentation)      
+      redirect_to admin_qwester_presentation_path(presentation)
     end
-    
+
     member_action :move_down do
       presentation = Presentation.find(params[:id])
       questionnaire = Questionnaire.find(params[:questionnaire_id])
       presentation.move_lower(questionnaire)
-      redirect_to admin_qwester_presentation_path(presentation)     
+      redirect_to admin_qwester_presentation_path(presentation)
     end
-    
+
   end
 end

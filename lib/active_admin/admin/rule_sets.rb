@@ -1,13 +1,14 @@
 module Qwester
 
   ActiveAdmin.register RuleSet do
-    
+
     menu_label = 'Rule Sets'
-    menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    # menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    menu_label = "#{menu_label}" unless Qwester.active_admin_menu
     menu :parent => Qwester.active_admin_menu, :label => menu_label
 
     config.batch_actions = false
-    
+
     index do
       column :title
       column :presentation
@@ -15,7 +16,8 @@ module Qwester
         rule_set.answers.count
       end
       column :rule
-      default_actions
+      #default_actions
+      actions
     end
 
     sidebar :rule_syntax do
@@ -55,32 +57,32 @@ module Qwester
           th "true"
           th "false"
           th "true"
-        end      
+        end
       end
-      
+
       para link_to('Rule engine documentation', 'https://github.com/reggieb/array_logic', :target => '_blank')
 
     end
-    
+
     sidebar :presentations do
       para <<EOF
 If a rule is assigned a presentation, that presentation's questionnaires will
 be displayed when the rule is matched.
 EOF
-      
+
       para <<EOF
 There is no mechanism to handle multiple rules with presentations, being trigged 
 at the same time. The app will just display the questionnaires assigned to the 
 last rule_set.presentation it finds. So some care should be taken to avoid 
 clashes.
 EOF
-      
+
       para <<EOF
 A rule set with a presentation, will change the display. It will not display
-an output tab, any url associated with the rule will be ignored.     
+an output tab, any url associated with the rule will be ignored.
 EOF
     end
-    
+
     form do |f|
       f.inputs "Details" do
         f.input :title
@@ -90,53 +92,51 @@ EOF
           f.input :description, :input_html => { :rows => 3}
         end
       end
-      
+
       f.inputs "Output Link" do
         f.input :url
-        f.input :link_text        
+        f.input :link_text
       end
-      
+
       f.inputs "Change Presentation of Questionnaires" do
         f.input :presentation, :as => :select, :collection => Presentation.all.collect(&:name), :include_blank => 'No effect on presentation'
       end
-      
+
       f.inputs "Logic" do
         f.input :rule, :input_html => { :rows => 3}
       end
-      
-      f.inputs("Questions") do 
-        
-        if qwester_rule_set.questions.empty?
-          
+
+      f.inputs("Questions") do
+        #if qwester_rule_set.questions.empty?
+        if qwester_rule_set.questions.blank?
           f.input(
-            :answers, 
-            :as => :check_boxes, 
-            :member_label => lambda {|a| "a#{a.id}: #{a.value} to '#{a.question.title}'"},
-            :input_html => { :size => 20, :multiple => true}
-          ) 
-          
-        else
-          
-          questions = qwester_rule_set.questions | Question.all
-          questions.collect! do |question|
-            style = 'border:#CCCCCC 1px solid;'
-            html = [content_tag('td', question.title, :style => style)]
-            answers = question.answers.collect do |answer|
-              answer_style = style
-              answer_style += 'background-color:#005C1F;color:white;font-weight:bold;' if qwester_rule_set.answers.include?(answer)
-              content_tag('td', "a#{answer.id} #{answer.value}".html_safe, :style => answer_style).html_safe
+              :answers,
+              :as => :check_boxes,
+              :member_label => lambda {|a| "a#{a.id}: #{a.value} to '#{a.question.title}'"},
+              :input_html => { :size => 20, :multiple => true}
+            )
+
+          else
+
+            questions = qwester_rule_set.questions | Question.all
+            questions.collect! do |question|
+              style = 'border:#CCCCCC 1px solid;'
+              html = [content_tag('td', question.title, :style => style)]
+              answers = question.answers.collect do |answer|
+                answer_style = style
+                answer_style += 'background-color:#005C1F;color:white;font-weight:bold;' if qwester_rule_set.answers.include?(answer)
+                content_tag('td', "a#{answer.id} #{answer.value}".html_safe, :style => answer_style).html_safe
+              end
+              html << answers.join(" ").html_safe
+              content_tag('tr', html.join(" ").html_safe)
             end
-            html << answers.join(" ").html_safe
-            content_tag('tr', html.join(" ").html_safe)
+            table_class = ["selection"]
+            table_class << 'associated_questions' if qwester_rule_set.id.present?
+            content_tag 'li', content_tag('table', questions.join("\n").html_safe, :class => table_class.join(' '))
+
           end
-          table_class = ["selection"]
-          table_class << 'associated_questions' if qwester_rule_set.id.present?
-          content_tag 'li', content_tag('table', questions.join("\n").html_safe, :class => table_class.join(' '))
-        
-        end
-        
       end
-      
+
       f.actions
     end
 
@@ -150,18 +150,18 @@ EOF
         )
       end
     end unless Qwester.rails_three?
-    
+
     show do
       div do
-        para sanitize(qwester_rule_set.description) 
+        para sanitize(qwester_rule_set.description)
       end if qwester_rule_set.description.present?
-      
+
       div do
         h3 'Target url'
         para link_to qwester_rule_set.url
         para qwester_rule_set.link_text? ? qwester_rule_set.link_text : 'No link text specified'
       end
-      
+
       div do
         h3 'Presentation'
         if qwester_rule_set.presentation?
@@ -170,12 +170,12 @@ EOF
           para "The presentations of questionnaires should be unaffected by this rule"
         end
       end
-      
+
       div do
         h3 'The rule'
         para qwester_rule_set.rule
       end
-      
+
       begin
         if qwester_rule_set.matching_answer_sets.present?
           div do
@@ -227,9 +227,9 @@ EOF
         h3 'Sample combinations'
         para e.message
       end
-        
-      
-    end  
+
+
+    end
 
   end if defined?(ActiveAdmin)
 

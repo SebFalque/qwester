@@ -11,8 +11,8 @@ module Qwester
     ANSWERS_LIMIT = 10
 
     has_and_belongs_to_many(
-      :answers, 
-      :uniq => true,
+      :answers,  #-> {uniq},
+      #:uniq => true,
       :join_table => :qwester_answers_rule_sets
     )
     accepts_nested_attributes_for :answers
@@ -44,7 +44,7 @@ module Qwester
     end
 
     def matching_answer_sets
-      @matching_answer_sets ||= logic.matching_combinations 
+      @matching_answer_sets ||= logic.matching_combinations
     end
 
     def blocking_answer_sets
@@ -64,7 +64,7 @@ module Qwester
       if (!self.rule or self.rule.empty?) and answers.length > 0
         self.rule = default_rule
       end
-    end  
+    end
 
     def keep_answers_in_step_with_rule
       generate_default_rule

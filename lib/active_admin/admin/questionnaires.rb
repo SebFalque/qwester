@@ -3,12 +3,16 @@ module Qwester
   ActiveAdmin.register Questionnaire do
 
     menu_label = 'Questionnaires'
-    menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    # menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    menu_label = "#{menu_label}" unless Qwester.active_admin_menu
     menu :parent => Qwester.active_admin_menu, :label => menu_label
 
     config.batch_actions = false
 
     index do
+      column :image do |questionnaire|
+        image_tag(questionnaire.button_image.url(:thumbnail))
+      end
       column :title
       column :questions do |questionnaire|
         questionnaire.questions.count
@@ -16,7 +20,8 @@ module Qwester
       column :must_complete do |questionnaire|
         questionnaire.must_complete? ? 'Yes' : 'No'
       end
-      default_actions
+      #default_actions
+      actions
     end
 
     form do |f|
@@ -28,6 +33,7 @@ module Qwester
           f.input :description, :input_html => { :rows => 3}
         end
         f.input :must_complete
+        f.input :button_image, :as => :file, :hint => f.template.image_tag(f.object.button_image.url(:link))
         f.input :questions, :as => :check_boxes, :collection => Question.all
       end
       f.actions
@@ -47,6 +53,10 @@ module Qwester
     show do
       div do
         sanitize(qwester_questionnaire.description.html_safe ) if qwester_questionnaire.description.present?
+      end
+
+      div do
+        image_tag qwester_questionnaire.button_image.url(:link)
       end
 
       div do
@@ -77,6 +87,9 @@ module Qwester
       questionnaire.move_lower(question)
       redirect_to admin_qwester_questionnaire_path(questionnaire)
     end
+
+
+
 
   end if defined?(ActiveAdmin)
 

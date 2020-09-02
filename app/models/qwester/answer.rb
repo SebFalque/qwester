@@ -12,7 +12,7 @@ module Qwester
       :rule_sets,
       :join_table => :qwester_answers_rule_sets
     )
-    
+
     has_and_belongs_to_many(
       :answer_stores,
       :join_table => :qwester_answer_stores_answers
@@ -39,11 +39,11 @@ module Qwester
     def self.rule_label_prefix
       @rule_label_prefix ||= 'a'
     end
-    
+
     def self.weighting_alias
       @weighting_alias
     end
-    
+
     def self.weighting_alias=(name)
       if name
         @weighting_alias = name
@@ -52,12 +52,12 @@ module Qwester
         remove_weighting_alias
       end
     end
-    
+
     def self.weighting_alias_name
       name = weighting_alias || :weighting
       name.to_s
     end
-    
+
     def self.remove_weighting_alias
       if weighting_alias
         remove_method weighting_alias.to_sym

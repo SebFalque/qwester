@@ -5,30 +5,38 @@ module Qwester
     end
 
     has_many(
-      :questionnaires_questions,
-      :order => 'position'
+      :questionnaires_questions, -> { order 'position' }
+      #:order => 'position'
     )
 
     has_many(
-      :questions,
+      :questions, -> { order 'position', uniq },
       :class_name => 'Qwester::Question',
-      :uniq => true,
+      #:uniq => true,
       :through => :questionnaires_questions,
-      :order => 'position'
+        #:order => 'position'
     )
 
     has_many(
-      :answers,
+      :answers, -> {uniq},
       :class_name => 'Qwester::Answer',
       :through => :questions,
-      :uniq => true
+    #:uniq => true
     )
     accepts_nested_attributes_for :answers
 
+    has_attached_file(
+      :button_image,
+      :styles => {
+        :link => '150x125>',
+        :thumbnail => '50x50>'
+      }
+    )
+
     has_and_belongs_to_many(
-      :answer_stores,
+      :answer_stores, -> {uniq},
       :join_table => :qwester_answer_stores_questionnaires,
-      :uniq => true
+    #:uniq => true
     )
 
     has_many :presentation_questionnaires
@@ -39,6 +47,7 @@ module Qwester
     )
 
     validates :title, :presence => true
+    validates_attachment_content_type :button_image, content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
     private
     def method_missing(symbol, *args, &block)

@@ -1,13 +1,14 @@
 module Qwester
 
   ActiveAdmin.register Question do
-    
+
     menu_label = 'Questions'
-    menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    # menu_label = "Qwester #{menu_label}" unless Qwester.active_admin_menu
+    menu_label = "#{menu_label}" unless Qwester.active_admin_menu
     menu :parent => Qwester.active_admin_menu, :label => menu_label
 
     config.batch_actions = false
-    
+
     index do
       column :ref
       column :title do |qwester_question|
@@ -19,7 +20,8 @@ module Qwester
       column :multi_answer do |qwester_question|
         qwester_question.multi_answer? ? 'Any' : 'One'
       end
-      default_actions
+      #default_actions
+      actions
     end
 
     show do
@@ -61,7 +63,7 @@ module Qwester
 
       f.actions
     end
-    
+
     controller do
 
       def new

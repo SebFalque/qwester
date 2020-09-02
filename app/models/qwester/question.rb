@@ -5,8 +5,8 @@ module Qwester
     end
 
     has_many(
-      :answers, 
-      :order => 'position',
+      :answers, -> { order 'position' },
+      #:order => 'position',
       :dependent => :destroy
     )
     accepts_nested_attributes_for :answers
@@ -14,9 +14,9 @@ module Qwester
     has_many :questionnaires_questions
 
     has_many(
-      :questionnaires,
-      :through => :questionnaires_questions, 
-      :uniq => true
+      :questionnaires, -> {uniq},
+      :through => :questionnaires_questions,
+    #:uniq => true
     )
 
     validates :title, :presence => true
@@ -24,7 +24,8 @@ module Qwester
     def build_standard_answers
       created_answers = Array.new
       Answer.standard_values.each_with_index do |value, index|
-        answer = answers.find_or_initialize_by_value(value)
+        #answer = answers.find_or_initialize_by_value(value)
+        answer = answers.find_or_initialize_by(value: value)
         answer.position = index + 1
         created_answers << answer
       end
