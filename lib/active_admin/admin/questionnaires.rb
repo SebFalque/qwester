@@ -11,6 +11,15 @@ module Qwester
 
     config.batch_actions = false
 
+    if Qwester.rails_four?
+      permit_params :title,
+                    :description,
+                    :button_image,
+                    :must_complete,
+                    question_ids: []
+    end
+
+
     index do
       column :image do |questionnaire|
         image_tag(questionnaire.button_image.url(:thumbnail))
@@ -50,7 +59,7 @@ module Qwester
           ]
         )
       end
-    end unless Qwester.rails_three?
+    end unless Qwester.rails_three? || Qwester.rails_four?
 
     show do
       div do

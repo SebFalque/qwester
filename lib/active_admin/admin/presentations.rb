@@ -8,6 +8,15 @@ module Qwester
 
     config.batch_actions = false
 
+    if Qwester.rails_four?
+      permit_params :name,
+                    :title,
+                    :default,
+                    :description,
+                    questionnaire_ids: []
+    end
+
+
     index do
       column :name do |presentation|
         link_to presentation.name, admin_qwester_presentation_path(presentation)
@@ -68,7 +77,7 @@ module Qwester
           ]
         )
       end
-    end unless Qwester.rails_three?
+    end unless Qwester.rails_three? || Qwester.rails_four?
 
     member_action :move_up do
       presentation = Presentation.find(params[:id])

@@ -9,6 +9,17 @@ module Qwester
 
     config.batch_actions = false
 
+    if Qwester.rails_four?
+      permit_params :title,
+                    :description,
+                    :url,
+                    :link_text,
+                    :presentation,
+                    :rule,
+                    answer_ids: []
+    end
+
+
     index do
       column :title
       column :presentation
@@ -149,7 +160,7 @@ EOF
           ]
         )
       end
-    end unless Qwester.rails_three?
+    end unless Qwester.rails_three? || Qwester.rails_four?
 
     show do
       div do

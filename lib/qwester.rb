@@ -37,7 +37,11 @@ module Qwester
   end
 
   def self.rails_three?
-    rails_version.to_i >= 3
+    rails_version.to_i == 3
   end
-  
+
+  def self.rails_four?
+    rails_version.to_i == 4
+  end
+
 end
