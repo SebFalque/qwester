@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", '~> 3.2'
+  s.add_dependency "rails"#, '~> 3.2'
   s.add_dependency "array_logic" # logic engine used in rule sets
   s.add_dependency 'acts_as_list'
 
