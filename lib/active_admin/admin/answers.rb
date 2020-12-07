@@ -1,3 +1,5 @@
+require 'answers'
+
 module Qwester
 
   ActiveAdmin.register Answer do
