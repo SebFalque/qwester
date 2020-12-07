@@ -33,11 +33,11 @@ module Qwester
   end
 
   def self.rails_version
-    @rails_version ||= Rails.version.split('.').first if defined? Rails
+    @rails_version ||= Rails.version.split('.').first.to_i if defined? Rails
   end
 
   def self.rails_three?
-    rails_version == '3'
+    rails_version.to_i >= 3
   end
   
 end

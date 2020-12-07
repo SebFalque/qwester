@@ -67,7 +67,7 @@ module Qwester
     controller do
 
       def new
-        @qwester_question = Question.new
+        @qwester_question = Qwester::Question.new
         @qwester_question.build_standard_answers
       end
 

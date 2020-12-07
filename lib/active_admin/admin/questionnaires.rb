@@ -1,3 +1,5 @@
+require 'qwester/question'
+
 module Qwester
 
   ActiveAdmin.register Questionnaire do
