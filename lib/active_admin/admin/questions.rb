@@ -9,13 +9,13 @@ module Qwester
 
     config.batch_actions = false
 
-    if Qwester.rails_four?
+    #if Qwester.rails_four?
       permit_params :ref,
                     :title,
                     :description,
                     :multi_answer,
                     answers_attributes: [:value, :position, :weighting]
-    end
+    #end
 
 
     index do
@@ -82,16 +82,16 @@ module Qwester
 
     end
 
-    controller do
-      def permitted_params
-        params.permit(
-          qwester_question: [
-            :ref, :title, :description, :multi_answer,
-            {answers_attributes: [:value, :position, :weighting]}
-          ]
-        )
-      end
-    end unless Qwester.rails_three? || Qwester.rails_four?
+    #controller do
+    #  def permitted_params
+    #    params.permit(
+    #      qwester_question: [
+    #        :ref, :title, :description, :multi_answer,
+    #        {answers_attributes: [:value, :position, :weighting]}
+    #      ]
+    #    )
+    #  end
+    #end unless Qwester.rails_three? || Qwester.rails_four?
 
   end if defined?(ActiveAdmin)
 

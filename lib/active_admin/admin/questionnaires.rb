@@ -11,13 +11,13 @@ module Qwester
 
     config.batch_actions = false
 
-    if Qwester.rails_four?
+    #if Qwester.rails_four?
       permit_params :title,
                     :description,
                     :button_image,
                     :must_complete,
                     question_ids: []
-    end
+    #end
 
 
     index do
@@ -50,16 +50,16 @@ module Qwester
       f.actions
     end
 
-    controller do
-      def permitted_params
-        params.permit(
-          qwester_questionnaire: [
-            :title, :description, :button_image, :must_complete,
-            {question_ids: []}
-          ]
-        )
-      end
-    end unless Qwester.rails_three? || Qwester.rails_four?
+    #controller do
+    #  def permitted_params
+    #    params.permit(
+    #      qwester_questionnaire: [
+    #        :title, :description, :button_image, :must_complete,
+    #        {question_ids: []}
+    #      ]
+    #    )
+    #  end
+    #end unless Qwester.rails_three? || Qwester.rails_four?
 
     show do
       div do

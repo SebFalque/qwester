@@ -8,13 +8,13 @@ module Qwester
 
     config.batch_actions = false
 
-    if Qwester.rails_four?
+    #if Qwester.rails_four?
       permit_params :name,
                     :title,
                     :default,
                     :description,
                     questionnaire_ids: []
-    end
+    #end
 
 
     index do
@@ -68,16 +68,16 @@ module Qwester
       f.actions
     end
 
-    controller do
-      def permitted_params
-        params.permit(
-          qwester_presentation: [
-            :name, :title, :default, :description,
-            {questionnaire_ids: []}
-          ]
-        )
-      end
-    end unless Qwester.rails_three? || Qwester.rails_four?
+    #controller do
+    #  def permitted_params
+    #    params.permit(
+    #      qwester_presentation: [
+    #        :name, :title, :default, :description,
+    #        {questionnaire_ids: []}
+    #      ]
+    #    )
+    #  end
+    #end unless Qwester.rails_three? || Qwester.rails_four?
 
     member_action :move_up do
       presentation = Presentation.find(params[:id])

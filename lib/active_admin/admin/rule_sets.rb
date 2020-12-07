@@ -9,7 +9,7 @@ module Qwester
 
     config.batch_actions = false
 
-    if Qwester.rails_four?
+    #if Qwester.rails_four?
       permit_params :title,
                     :description,
                     :url,
@@ -17,7 +17,7 @@ module Qwester
                     :presentation,
                     :rule,
                     answer_ids: []
-    end
+    #end
 
 
     index do
@@ -151,16 +151,16 @@ EOF
       f.actions
     end
 
-    controller do
-      def permitted_params
-        params.permit(
-          qwester_rule_set: [
-            :title, :description, :url, :link_text, :presentation, :rule,
-            {answer_ids: []}
-          ]
-        )
-      end
-    end unless Qwester.rails_three? || Qwester.rails_four?
+    #controller do
+    #  def permitted_params
+    #    params.permit(
+    #      qwester_rule_set: [
+    #        :title, :description, :url, :link_text, :presentation, :rule,
+    #        {answer_ids: []}
+    #      ]
+    #    )
+    #  end
+    #end unless Qwester.rails_three? || Qwester.rails_four?
 
     show do
       div do
