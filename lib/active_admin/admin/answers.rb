@@ -1,4 +1,4 @@
-require 'answers'
+require 'qwester/answer'
 
 module Qwester
 
